@@ -43,9 +43,9 @@ function App() {
         {
           pack: {
             pack_format: 10,
-            description: `Removes vanilla Cobblemon spawns for ${selected
+            description: `Adds shoulder mount capability for ${selected
               .map((e) => e.label)
-              .join(", ")}`,
+              .join(", ")}. Best of luck with how it looks though!`,
           },
         },
         null,
