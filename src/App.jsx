@@ -53,7 +53,7 @@ function App() {
       )
     );
     await zip.generateAsync({ type: "blob" }).then(function (content) {
-      saveAs(content, "removals.zip");
+      saveAs(content, "uppies.zip");
     });
     setLoading(false);
   }, [selected]);
