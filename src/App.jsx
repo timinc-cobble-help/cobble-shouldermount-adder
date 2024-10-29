@@ -1,11 +1,11 @@
 import { Button, CssBaseline, Stack } from "@mui/material";
-import usePokedata from "./hooks/usePokedata";
-import TransferList from "./components/TransferList";
-import { useCallback, useState } from "react";
-import JSZip from "jszip";
-import removeSpawn from "./data/removeSpawn.json";
 import { saveAs } from "file-saver";
+import JSZip from "jszip";
+import { useCallback, useState } from "react";
+
 import LoadingScreen from "./components/LoadingScreen";
+import TransferList from "./components/TransferList";
+import usePokedata from "./hooks/usePokedata";
 
 const version = "1.5.2";
 
@@ -19,9 +19,23 @@ function App() {
     const zip = new JSZip();
     for (const { value: path } of selected) {
       const splitPath = path.split("/");
-      const dataIndex = splitPath.indexOf("data");
-      const finalPath = splitPath.slice(dataIndex).join("/");
-      zip.file(finalPath, JSON.stringify(removeSpawn, null, 2));
+      const finalPath = [
+        "data",
+        "cobblemon",
+        "species_additions",
+        ...splitPath.slice(-2),
+      ].join("/");
+      zip.file(
+        finalPath,
+        JSON.stringify(
+          {
+            target: `cobblemon:${splitPath[splitPath.length - 1].slice(0, -5)}`,
+            shoulderMountable: true,
+          },
+          null,
+          2
+        )
+      );
     }
     zip.file(
       "pack.mcmeta",
@@ -64,8 +78,8 @@ function App() {
       <Stack direction="column" sx={{ height: "100vh" }} p={1} gap={1}>
         {pokemon && (
           <TransferList
-            leftLabel="In"
-            rightLabel="Axed"
+            leftLabel="Unchanged"
+            rightLabel="Uppies"
             items={pokemon}
             selected={selected}
             setSelected={setSelected}
@@ -74,7 +88,9 @@ function App() {
         <Button variant="contained" onClick={handleDownload}>
           Download
         </Button>
-        <Button variant="contained" color="warning" onClick={handleClearCache}>Clear Cache</Button>
+        <Button variant="contained" color="warning" onClick={handleClearCache}>
+          Clear Cache
+        </Button>
       </Stack>
     </>
   );
